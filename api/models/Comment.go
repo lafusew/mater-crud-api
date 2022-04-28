@@ -86,7 +86,7 @@ func (c *Comment) DeleteComment(db *gorm.DB, cid uint32) (int64, error) {
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Comment not found")
+			return 0, errors.New("comment not found")
 		}
 		return 0, db.Error
 	}
