@@ -35,11 +35,12 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 
 	if true {
 		err = server.DB.Debug().DropTableIfExists(
+			&models.Tag{},
 			"membership",
 			&models.Comment{},
-			 &models.Team{},
-			 &models.Post{},
-			 &models.User{},
+			&models.Team{},
+			&models.Post{},
+			&models.User{},
 		).Error
 		if err != nil {
 			log.Fatalf("cannot drop table: %v", err)
@@ -51,6 +52,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		&models.Post{},
 		&models.Team{},
 		&models.Comment{},
+		&models.Tag{},
 	)
 
 	InitializeForeignKeys(server.DB)
@@ -69,32 +71,32 @@ func InitializeForeignKeys(db *gorm.DB) error {
 	defer fmt.Println("fkeys initialized")
 
 	// POST
-	err := db.Debug().Model(models.Post{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
+	err := db.Debug().Model(models.Post{}).AddForeignKey("author_id", "users(id)", "CASCADE", "CASCADE").Error
 	if err != nil {
 		return fmt.Errorf("couldn't add foreign key to posts %v", err)
 	}
 
 	// COMMENT
-	err = db.Debug().Model(models.Comment{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
+	err = db.Debug().Model(models.Comment{}).AddForeignKey("author_id", "users(id)", "CASCADE", "CASCADE").Error
 	if err != nil {
 		return fmt.Errorf("couldn't add foreign key to comments %v", err)
 	}
 
-	err = db.Debug().Model(models.Comment{}).AddForeignKey("post_id", "posts(id)", "cascade", "cascade").Error
+	err = db.Debug().Model(models.Comment{}).AddForeignKey("post_id", "posts(id)", "CASCADE", "CASCADE").Error
 	if err != nil {
 		return fmt.Errorf("couldn't add foreign key to comments: %v", err)
 	}
 
 	// MEMBERSHIP JOIN TABLE RELATIONS
-	err = db.Debug().Table("membership").AddForeignKey("user_id", "users(id)", "restric", "restric").Error
+	err = db.Debug().Table("membership").AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT").Error
 	if err != nil {
 		return fmt.Errorf("couldn't add foreign key to membership: %v", err)
 	}
 
-	err = db.Debug().Table("membership").AddForeignKey("team_id", "teams(id)", "restric", "restric").Error
+	err = db.Debug().Table("membership").AddForeignKey("team_id", "teams(id)", "RESTRICT", "RESTRICT").Error
 	if err != nil {
 		return fmt.Errorf("couldn't add foreign key to membership: %v", err)
 	}
-	
+
 	return nil
 }
