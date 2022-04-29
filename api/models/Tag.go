@@ -11,9 +11,11 @@ import (
 
 type Tag struct {
 	gorm.Model
-	Code string `gorm:"size:6;not null;unique" json:"code"`
-	Name string `gorm:"size:16;not null" json:"name"`
-	Desc string `json:"desc"`
+	Code   string   `gorm:"size:6;not null;unique" json:"code"`
+	Name   string   `gorm:"size:16;not null" json:"name"`
+	Desc   string   `json:"desc"`
+	Teams  []*Team  `gorm:"many2many:team_tags"`
+	Events []*Event `gorm:"many2many:event_tags"`
 }
 
 func (t *Tag) Prepare() {

@@ -12,8 +12,8 @@ import (
 type Comment struct {
 	gorm.Model        // extends Model that contains ID, CreatedAt, UpdatedAt, DeletedAt
 	Body       string `gorm:"size:24;not null;unique" json:"body"`
-	AuthorID   uint `gorm:"not null" json:"author_id"`
-	PostID     uint `gorm:"not null" json:"post_id"`
+	AuthorID   uint   `gorm:"not null" json:"author_id"`
+	PostID     uint   `gorm:"not null" json:"post_id"`
 }
 
 func (c *Comment) Prepare() {

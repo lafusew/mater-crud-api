@@ -14,7 +14,7 @@ type Post struct {
 	Title      string `gorm:"size:255;not null;unique" json:"title"`
 	Content    string `gorm:"size:255;not null;" json:"content"`
 	AuthorID   uint   `gorm:"not null" json:"author_id"`
-	Comments []Comment
+	Comments   []Comment
 }
 
 func (p *Post) Prepare() {

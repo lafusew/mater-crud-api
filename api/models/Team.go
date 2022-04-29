@@ -16,6 +16,7 @@ type Team struct {
 	ProfilePicture string  `gorm:"size:255;" json:"profile_picture"`
 	IsPrivate      bool    `gorm:"default:false" json:"is_private"`
 	Members        []*User `gorm:"many2many:membership"`
+	Tags           []*Tag  `gorm:"many2many:team_tags"`
 }
 
 func (t *Team) Prepare() {
