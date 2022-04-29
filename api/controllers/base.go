@@ -35,11 +35,13 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 
 	if true {
 		err = server.DB.Debug().DropTableIfExists(
-			&models.Tag{},
+			"team_tags",
+			&models.Event{},
 			"membership",
 			&models.Comment{},
 			&models.Team{},
 			&models.Post{},
+			&models.Tag{},
 			&models.User{},
 		).Error
 		if err != nil {
@@ -53,6 +55,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		&models.Team{},
 		&models.Comment{},
 		&models.Tag{},
+		&models.Event{},
 	)
 
 	InitializeForeignKeys(server.DB)
@@ -98,5 +101,26 @@ func InitializeForeignKeys(db *gorm.DB) error {
 		return fmt.Errorf("couldn't add foreign key to membership: %v", err)
 	}
 
+	// TEAM_TAGS JOIN TABLE RELATIONS
+	err = db.Debug().Table("team_tags").AddForeignKey("team_id", "teams(id)", "RESTRICT", "RESTRICT").Error
+	if err != nil {
+		return fmt.Errorf("couldn't add foreign key to membership: %v", err)
+	}
+
+	err = db.Debug().Table("team_tags").AddForeignKey("tag_id", "tags(id)", "RESTRICT", "RESTRICT").Error
+	if err != nil {
+		return fmt.Errorf("couldn't add foreign key to membership: %v", err)
+	}
+
+	err = db.Debug().Table("event_tags").AddForeignKey("event_id", "events(id)", "RESTRICT", "RESTRICT").Error
+	if err != nil {
+		return fmt.Errorf("couldn't add foreign key to membership: %v", err)
+	}
+
+	err = db.Debug().Table("event_tags").AddForeignKey("tag_id", "tags(id)", "RESTRICT", "RESTRICT").Error
+	if err != nil {
+		return fmt.Errorf("couldn't add foreign key to membership: %v", err)
+	}
+	
 	return nil
 }
