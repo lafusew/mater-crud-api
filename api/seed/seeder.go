@@ -31,9 +31,18 @@ var posts = []models.Post{
 	},
 }
 
+var comments = []models.Comment{
+	{
+		Body: "Comment body1",
+	},
+	{
+		Body: "Comment body2",
+	},
+}
+
 func Load(db *gorm.DB) {
 
-	err := db.Debug().DropTableIfExists(&models.Comment{}, &models.Post{}, &models.User{}).Error
+	err := db.Debug().DropTableIfExists("membership", &models.Comment{},  &models.Team{}, &models.Post{}, &models.User{}).Error
 	if err != nil {
 		log.Fatalf("cannot drop table: %v", err)
 	}
@@ -43,29 +52,21 @@ func Load(db *gorm.DB) {
 		log.Fatalf("cannot migrate table: %v", err)
 	}
 
-	err = db.Debug().Model(&models.Post{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
-	if err != nil {
-		log.Fatalf("attaching foreign key error: %v", err)
-	}
-
-	err = db.Debug().Model(&models.Comment{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
-	if err != nil {
-		log.Fatalf("attaching foreign key error: %v", err)
-	}
-
-	err = db.Debug().Model(&models.Comment{}).AddForeignKey("post_id", "posts(id)", "cascade", "cascade").Error
-	if err != nil {
-		log.Fatalf("attaching foreign key error: %v", err)
-	}
-
 	for i := range users {
 		err = db.Debug().Model(&models.User{}).Create(&users[i]).Error
 		if err != nil {
 			log.Fatalf("cannot seed users table: %v", err)
 		}
-		posts[i].AuthorID = users[i].ID
 
+		posts[i].AuthorID = users[i].ID
 		err = db.Debug().Model(&models.Post{}).Create(&posts[i]).Error
+		if err != nil {
+			log.Fatalf("cannot seed posts table: %v", err)
+		}
+
+		comments[i].AuthorID = users[i].ID
+		comments[i].PostID = posts[i].ID
+		err = db.Debug().Model(&models.Comment{}).Create(&comments[i]).Error
 		if err != nil {
 			log.Fatalf("cannot seed posts table: %v", err)
 		}
