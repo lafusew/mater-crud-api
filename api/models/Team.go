@@ -10,12 +10,12 @@ import (
 )
 
 type Team struct {
-	gorm.Model // extends Model that contains ID, CreatedAt, UpdatedAt, DeletedAt
-	Name           string    `gorm:"size:24;not null;unique" json:"name"`
-	Desc           string    `gorm:"size:255;" json:"desc"`
-	ProfilePicture string    `gorm:"size:255;" json:"profile_picture"`
-	IsPrivate      bool      `gorm:"default:false" json:"is_private"`
-	Members []*User `gorm:"many2many:membership"`
+	gorm.Model             // extends Model that contains ID, CreatedAt, UpdatedAt, DeletedAt
+	Name           string  `gorm:"size:24;not null;unique" json:"name"`
+	Desc           string  `gorm:"size:255;" json:"desc"`
+	ProfilePicture string  `gorm:"size:255;" json:"profile_picture"`
+	IsPrivate      bool    `gorm:"default:false" json:"is_private"`
+	Members        []*User `gorm:"many2many:membership"`
 }
 
 func (t *Team) Prepare() {

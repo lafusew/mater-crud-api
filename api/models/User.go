@@ -13,13 +13,13 @@ import (
 )
 
 type User struct {
-	gorm.Model // extends Model that contains ID, CreatedAt, UpdatedAt, DeletedAt
-	Name           string    `gorm:"size:24;not null;unique" json:"name"`
-	Email          string    `gorm:"size:100;not null;unique" json:"email"`
-	Password       string    `gorm:"size:100;not null;" json:"password"`
-	ProfilePicture string    `gorm:"size:255;" json:"profile_picture"`
-	Bio            string    `gorm:"size:255;" json:"bio"`
-	Teams []*Team `gorm:"many2many:membership"`
+	gorm.Model             // extends Model that contains ID, CreatedAt, UpdatedAt, DeletedAt
+	Name           string  `gorm:"size:24;not null;unique" json:"name"`
+	Email          string  `gorm:"size:100;not null;unique" json:"email"`
+	Password       string  `gorm:"size:100;not null;" json:"password"`
+	ProfilePicture string  `gorm:"size:255;" json:"profile_picture"`
+	Bio            string  `gorm:"size:255;" json:"bio"`
+	Teams          []*Team `gorm:"many2many:membership"`
 }
 
 func Hash(password string) ([]byte, error) {
@@ -51,7 +51,7 @@ func (u *User) Validate(action string) error {
 	switch strings.ToLower(action) {
 	case "update":
 		if u.Name == "" {
-			return errors.New("required nickname")
+			return errors.New("required ickname")
 		}
 		if u.Password == "" {
 			return errors.New("required password")

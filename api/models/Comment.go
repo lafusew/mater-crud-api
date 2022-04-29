@@ -10,19 +10,15 @@ import (
 )
 
 type Comment struct {
-	gorm.Model // extends Model that contains ID, CreatedAt, UpdatedAt, DeletedAt
-	Body      string    `gorm:"size:24;not null;unique" json:"body"`
-	Author    User      `json:"author"`
-	AuthorID  uint32    `gorm:"not null" json:"author_id"`
-	Post      Post      `json:"post"`
-	PostID    uint32    `gorm:"not null" json:"post_id"`
+	gorm.Model        // extends Model that contains ID, CreatedAt, UpdatedAt, DeletedAt
+	Body       string `gorm:"size:24;not null;unique" json:"body"`
+	AuthorID   uint `gorm:"not null" json:"author_id"`
+	PostID     uint `gorm:"not null" json:"post_id"`
 }
 
 func (c *Comment) Prepare() {
 	c.ID = 0
 	c.Body = html.EscapeString(strings.TrimSpace(c.Body))
-	c.Post = Post{}
-	c.Author = User{}
 	c.CreatedAt = time.Now()
 }
 
@@ -54,19 +50,6 @@ func (c *Comment) FindAll(db *gorm.DB) (*[]Comment, error) {
 		return &[]Comment{}, err
 	}
 
-	if len(comments) > 0 {
-		for i := range comments {
-			err := db.Debug().Model(&User{}).Where("id = ?", comments[i].AuthorID).Take(&c.Author).Error
-			if err != nil {
-				return &[]Comment{}, nil
-			}
-
-			err = db.Debug().Model(&Post{}).Where("id = ?", comments[i].PostID).Take(&c.Post).Error
-			if err != nil {
-				return &[]Comment{}, nil
-			}
-		}
-	}
 	return &comments, nil
 }
 
