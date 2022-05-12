@@ -24,5 +24,5 @@ func Run() {
 	// /!\ SEEDER DROP DB /!\
 	// seed.Load(server.DB)
 
-	server.Run(":8080")
+	server.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }
