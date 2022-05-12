@@ -36,6 +36,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 	if true {
 		err = server.DB.Debug().DropTableIfExists(
 			"team_tags",
+			"event_tags",
 			&models.Event{},
 			"membership",
 			&models.Comment{},
