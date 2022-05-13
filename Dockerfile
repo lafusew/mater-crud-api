@@ -22,7 +22,15 @@ FROM gcr.io/distroless/base
 # Definition of this variable is used by 'skaffold debug' to identify a golang binary.
 # Default behavior - a failure prints a stack trace for the current goroutine.
 # See https://golang.org/pkg/runtime/
+
 ENV GOTRACEBACK=single
+# ENV API_SECRET=secret
+# ENV DB_HOST=10.54.64.3
+# ENV DB_DRIVER=postgres
+# ENV DB_NAME=postgres
+# ENV DB_USER=postgres
+# ENV DB_PASSWORD=passmater
+# ENV DB_PORT=5432
 
 # Copy template & assets
 WORKDIR /mater-crud-api
